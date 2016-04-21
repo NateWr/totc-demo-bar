@@ -52,6 +52,14 @@ class totcdbInit {
 	public $public_key = '';
 
 	/**
+	* AffiliateWP Affiliate referral ID if one is in play
+	*
+	* @see config.php
+	* @since 0.1
+	*/
+	public $affiliate_referral;
+
+	/**
 	* EDD API Token
 	*
 	* @see config.php
@@ -131,6 +139,9 @@ class totcdbInit {
 
 		// Add the admin demo bar
 		add_action( 'wp_footer', array( $this, 'display_demo_bar' ), 999 );
+
+		// Set and get affiliate referrals by cookie
+		add_action( 'wp', array( $this, 'set_affiliate_referral' ) );
 	}
 
 	/**
@@ -219,6 +230,25 @@ class totcdbInit {
 		include_once( self::$plugin_dir . '/templates/demo-bar.php' );
 	}
 
+	/**
+	 * Set the affiliate referral ID if one is available
+	 *
+	 * @since 0.1
+	 */
+	public function set_affiliate_referral() {
+
+		if ( isset( $_GET['ref'] ) ) {
+			$ref = absint( $_GET['ref'] );
+			if ( !empty( $ref ) ) {
+				setcookie( 'affiliate_referral', $ref, time()+60*60*24*30 ); // 30 days
+				$this->affiliate_referral = $ref;
+			}
+		}
+
+		if ( is_null( $this->affiliate_referral ) && isset( $_COOKIE['affiliate_referral'] ) ) {
+			$this->affiliate_referral = absint( $_COOKIE['affiliate_referral'] );
+		}
+	}
 }
 
 /**

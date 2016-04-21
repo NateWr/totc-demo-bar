@@ -148,6 +148,21 @@
 		<p><strong>30-day money-back guarantee.</strong></p>
 	</div>
 	<div class="totcdb-footer">
-		<a class="totcdb-button" href="<?php echo esc_url( $this->store_url . '?edd_action=add_to_cart&download_id=' . absint( $this->download_id ) ) ?>">Buy Now</a>
+		<?php
+			// Compile the buy button
+			$url = add_query_arg(
+				array(
+					'edd_action' => 'add_to_cart',
+					'download_id' => absint( $this->download_id )
+				),
+				$this->store_url
+			);
+
+			// Add affiliate referral link
+			if ( !empty( $this->affiliate_referral ) ) {
+				$url = add_query_arg( 'ref', $this->affiliate_referral );
+			}
+		?>
+		<a class="totcdb-button" href="<?php echo esc_url( $url ) ?>">Buy Now</a>
 	</div>
 </div>
