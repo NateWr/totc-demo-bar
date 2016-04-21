@@ -130,9 +130,9 @@
 				$( e.target ).attr( 'disabled', 'disabled' );
 				return;
 			}
-			if ( $(this).hasClass( 'open' ) ) {
+			if ( $( e.target ).hasClass( 'totcdb-close' ) ) {
 				$(this).removeClass( 'open' );
-			} else {
+			} else if ( $( e.target ).hasClass( 'totcdb-open' ) ) {
 				$(this).addClass( 'open' );
 			}
 		} );
