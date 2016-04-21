@@ -29,6 +29,30 @@ if ( !class_exists( 'totcdbInit' ) ) {
 class totcdbInit {
 
 	/**
+	* URL to your EDD store
+	*
+	* @see config.php
+	* @since 0.1
+	*/
+	public $store_url = '';
+
+	/**
+	* EDD API Public Key
+	*
+	* @see config.php
+	* @since 0.1
+	*/
+	public $public_key = '';
+
+	/**
+	* EDD API Token
+	*
+	* @see config.php
+	* @since 0.1
+	*/
+	public $token = '';
+
+	/**
 	 * The single instance of this class
 	 */
 	private static $instance;
@@ -68,17 +92,36 @@ class totcdbInit {
 	 */
 	public function init() {
 
+		// Display an admin notice if there's no config file
+		if ( !file_exists( self::$plugin_dir . '/config.php' ) ) {
+			if ( current_user_can( 'manage_options' ) ) {
+				add_action( 'admin_notices', function() {
+					?>
+					<div class="notice notice-error">
+						<p>
+							<?php esc_html_e( 'You must create a config file before you can use the Demo Bar plugin.', 'totc-demo-bar' ); ?>
+						</p>
+					</div>
+					<?php
+				} );
+			}
+
+			return;
+		}
+
+		require_once( self::$plugin_dir . '/config.php' );
+		$settings = totcdb_config();
+		$this->store_url = $settings['store_url'];
+		$this->public_key = $settings['public_key'];
+		$this->token = $settings['token'];
+
 		// Initialize the plugin
-		add_action( 'init', array( $this, 'load_config' ) );
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 
-	}
+		// Load settings panel
+		add_action( 'admin_menu', array( $this, 'load_settings' ), -1 );
 
-	/**
-	 * Load the plugin's configuration settings and default content
-	 * @since 0.1.0
-	 */
-	public function load_config() {	}
+	}
 
 	/**
 	 * Load the plugin textdomain for localistion
@@ -86,6 +129,66 @@ class totcdbInit {
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain( 'totc-demo-bar', false, plugin_basename( dirname( __FILE__ ) ) . '/languages/' );
+	}
+
+
+	/**
+	 * Load the settings panel
+	 *
+	 * @since 0.1
+	 */
+	public function load_settings() {
+
+		require_once( self::$plugin_dir . '/lib/simple-admin-pages/simple-admin-pages.php' );
+
+		$sap = sap_initialize_library(
+			array(
+				'version' => '2.0',
+				'lib_url' => self::$plugin_dir . '/lib/simple-admin-pages/',
+				'lib_extension_path' => self::$plugin_dir .'/includes/simple-admin-pages/',
+				'debug_mode' => true,
+			)
+		);
+
+		$sap->add_page(
+			'options',
+			array(
+				'id' => 'totcdb',
+				'title' => __( 'Demo Bar Setup', 'totc-demo-bar' ),
+				'menu_title' => __( 'Demo Bar', 'totc-demo-bar' ),
+				'capability' => 'manage_options',
+			)
+		);
+
+		$sap->add_section(
+			'totcdb',
+			array(
+				'id' => 'totcdb-setup',
+				'title' => __( 'Setup', 'totc-demo-bar' ),
+			)
+		);
+
+		$sap->add_setting(
+			'totcdb',
+			'totcdb-setup',
+			array(
+				'id'		=> 'download_id',
+				'filename'	=> 'AdminPageSetting.EDDProduct.class.php',
+				'class'		=> 'totcdbAdminPageSettingEDDProduct',
+			),
+			array(
+				'id' => 'download_id',
+				'title' => __( 'EDD Download', 'totc-demo-bar' ),
+				'description' => sprintf( __( 'Select the EDD Download which this site is demoing. Downloads are being fetched from: %s', 'totc-demo-bar' ), $this->store_url ),
+				'store_url' => $this->store_url,
+				'public_key' => $this->public_key,
+				'token' => $this->token,
+			)
+		);
+
+		$sap = apply_filters( 'totcdb_settings_page', $sap );
+
+		$sap->add_admin_menus();
 	}
 
 }
