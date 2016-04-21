@@ -141,7 +141,6 @@ class totcdbInit {
 		add_action( 'wp_footer', array( $this, 'display_demo_bar' ), 999 );
 
 		// Set and get affiliate referrals by cookie
-		add_filter( 'query_vars', array( $this, 'register_affiliate_query_var' ) );
 		add_action( 'wp', array( $this, 'set_affiliate_referral' ) );
 	}
 
@@ -229,16 +228,6 @@ class totcdbInit {
 		$this->download_id = $settings['download_id'];
 
 		include_once( self::$plugin_dir . '/templates/demo-bar.php' );
-	}
-
-	/**
-	 * Register the affiliate referral query arg
-	 *
-	 * @since 0.1
-	 */
-	public function register_affiliate_query_var( $vars ) {
-		$vars[] = 'ref';
-		return $vars;
 	}
 
 	/**
