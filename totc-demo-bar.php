@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Demo Bar for Theme of the Crop
  * Plugin URI: http://themeofthecrop.com
- * Description: Display a demo bar for a product on a third-party site. Connects to EDD.
+ * Description: Display a demo bar for a product on a separate site. Connects to EDD.
  * Version: 0.1.0
  * Author: Theme of the Crop
  * Author URI: http://themeofthecrop.com
