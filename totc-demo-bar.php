@@ -25,8 +25,15 @@
 if ( ! defined( 'ABSPATH' ) )
 	exit;
 
-if ( !class_exists( 'totcdbInit' ) ) {
 class totcdbInit {
+
+	/**
+	* Name of your EDD store
+	*
+	* @see config.php
+	* @since 0.1
+	*/
+	public $store_name = '';
 
 	/**
 	* URL to your EDD store
@@ -111,6 +118,7 @@ class totcdbInit {
 
 		require_once( self::$plugin_dir . '/config.php' );
 		$settings = totcdb_config();
+		$this->store_name = $settings['store_name'];
 		$this->store_url = $settings['store_url'];
 		$this->public_key = $settings['public_key'];
 		$this->token = $settings['token'];
@@ -121,6 +129,8 @@ class totcdbInit {
 		// Load settings panel
 		add_action( 'admin_menu', array( $this, 'load_settings' ), -1 );
 
+		// Add the admin demo bar
+		add_action( 'wp_footer', array( $this, 'display_demo_bar' ), 999 );
 	}
 
 	/**
@@ -191,8 +201,25 @@ class totcdbInit {
 		$sap->add_admin_menus();
 	}
 
+	/**
+	 * Display the demo bar on the frontend
+	 *
+	 * @since 0.1
+	 */
+	public function display_demo_bar() {
+
+		$settings = get_option( 'totcdb', false );
+
+		if ( $settings === false || empty( $settings['download_id'] ) ) {
+			return;
+		}
+
+		$this->download_id = $settings['download_id'];
+
+		include_once( self::$plugin_dir . '/templates/demo-bar.php' );
+	}
+
 }
-} // endif;
 
 /**
  * This function returns one totcdbInit instance everywhere
@@ -200,9 +227,7 @@ class totcdbInit {
  *
  * Example: $totcdb = totcdbInit();
  */
-if ( !function_exists( 'totcdbInit' ) ) {
 function totcdbInit() {
 	return totcdbInit::instance();
 }
 add_action( 'plugins_loaded', 'totcdbInit' );
-} // endif;
