@@ -160,7 +160,7 @@
 
 			// Add affiliate referral link
 			if ( !empty( $this->affiliate_referral ) ) {
-				$url = add_query_arg( 'ref', $this->affiliate_referral );
+				$url = add_query_arg( 'ref', $this->affiliate_referral, $url );
 			}
 		?>
 		<a class="totcdb-button" href="<?php echo esc_url( $url ) ?>">Buy Now</a>
