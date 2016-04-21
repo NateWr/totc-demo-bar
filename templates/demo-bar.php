@@ -10,16 +10,44 @@
 		text-align: center;
 		z-index: 99999;
 		box-shadow: 0 0 10px rgba(0,0,0,0.3);
-		transform: translateX(80%);
+		transform: translateX(90%);
 		transition: transform 0.3s;
 	}
 
-	.totc-demo-bar.arrive {
+	.totcdb-close,
+	.totcdb-open {
+		display: block;
+		position: absolute;
+		top: 0;
+		left: -10px;
+		height: 38px;
+		line-height: 38px;
+		font-size: 18px;
+		padding: 0 0.5em;
+		color: rgba(255,255,255,0.8);
+		text-decoration: none;
+		background: #555;
+		border-radius: 4px;
+	}
+
+	.totcdb-close {
+		display: none;
+	}
+
+	.totc-demo-bar.open {
 		transform: translateX(0);
 	}
 
 	.totc-demo-bar.initial {
 		transform: translateX(110%);
+	}
+
+	.totc-demo-bar.open .totcdb-close {
+		display: block;
+	}
+
+	.totc-demo-bar.open .totcdb-open {
+		display: none;
 	}
 
 	.totcdb-logo {
@@ -95,22 +123,24 @@
 		var totcdb = $( '#totcdb' );
 		setTimeout( function() {
 			totcdb.removeClass( 'initial' );
-			totcdb.addClass( 'arrive' );
+			totcdb.addClass( 'open' );
 		}, 2000 );
 		totcdb.click( function(e) {
 			if ( $( e.target ).hasClass( 'totcdb-button' ) ) {
 				$( e.target ).attr( 'disabled', 'disabled' );
 				return;
 			}
-			if ( $(this).hasClass( 'arrive' ) ) {
-				$(this).removeClass( 'arrive' );
+			if ( $(this).hasClass( 'open' ) ) {
+				$(this).removeClass( 'open' );
 			} else {
-				$(this).addClass( 'arrive' );
+				$(this).addClass( 'open' );
 			}
 		} );
 	} );
 </script>
 <div id="totcdb" class="totc-demo-bar initial">
+	<a class="totcdb-close" href="#">&rarr;</a>
+	<a class="totcdb-open" href="#">&larr;</a>
 	<a class="totcdb-logo" href="<?php echo esc_url( $this->store_url ); ?>">
 		<img src="<?php echo esc_url( self::$plugin_url . '/assets/img/logo-white-390x60.png' ); ?>" alt="<?php echo esc_html( $this->store_name ); ?>">
 	</a>
