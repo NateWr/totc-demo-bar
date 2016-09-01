@@ -162,6 +162,18 @@
 			if ( !empty( $this->affiliate_referral ) ) {
 				$url = add_query_arg( 'ref', $this->affiliate_referral, $url );
 			}
+
+			// Add campaign tracking
+			if ( !empty( $this->campaign_medium ) ) {
+				$url = add_query_arg(
+					array(
+						'source' => urlencode( 'Theme Demo' ),
+						'medium' => urlencode( $this->campaign_medium ),
+						'campaign' => urlencode( 'Demo Bar - Buy Button' ),
+					),
+					$url
+				);
+			}
 		?>
 		<a class="totcdb-button" href="<?php echo esc_url( $url ) ?>">Buy Now</a>
 	</div>

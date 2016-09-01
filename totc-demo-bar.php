@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Demo Bar for Theme of the Crop
- * Plugin URI: http://themeofthecrop.com
+ * Plugin URI: https://themeofthecrop.com
  * Description: Display a demo bar for a product on a separate site. Connects to EDD.
  * Version: 0.1.0
  * Author: Theme of the Crop
- * Author URI: http://themeofthecrop.com
+ * Author URI: https://themeofthecrop.com
  * License:     GNU General Public License v2.0 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -207,6 +207,17 @@ class totcdbInit {
 			)
 		);
 
+		$sap->add_setting(
+			'totcdb',
+			'totcdb-setup',
+			'text',
+			array(
+				'id' => 'campaign_medium',
+				'title' => __( 'Google Analytics Campaign Medium', 'totc-demo-bar' ),
+				'description' => __( 'Add a campaign medium if you would like to track referall traffic from the demo bar. This is usually the theme name.', 'totc-demo-bar' ),
+			)
+		);
+
 		$sap = apply_filters( 'totcdb_settings_page', $sap );
 
 		$sap->add_admin_menus();
@@ -226,6 +237,7 @@ class totcdbInit {
 		}
 
 		$this->download_id = $settings['download_id'];
+		$this->campaign_medium = !empty( $settings['campaign_medium'] ) ? $settings['campaign_medium'] : '';
 
 		include_once( self::$plugin_dir . '/templates/demo-bar.php' );
 	}
