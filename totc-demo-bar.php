@@ -192,18 +192,11 @@ class totcdbInit {
 		$sap->add_setting(
 			'totcdb',
 			'totcdb-setup',
+			'text',
 			array(
-				'id'		=> 'download_id',
-				'filename'	=> 'AdminPageSetting.EDDProduct.class.php',
-				'class'		=> 'totcdbAdminPageSettingEDDProduct',
-			),
-			array(
-				'id' => 'download_id',
-				'title' => __( 'EDD Download', 'totc-demo-bar' ),
-				'description' => sprintf( __( 'Select the EDD Download which this site is demoing. Downloads are being fetched from: %s', 'totc-demo-bar' ), $this->store_url ),
-				'store_url' => $this->store_url,
-				'public_key' => $this->public_key,
-				'token' => $this->token,
+				'id' => 'product_url',
+				'title' => __( 'Product URL', 'totc-demo-bar' ),
+				'description' => __( 'Enter the product URL uses should be sent to when clicking the Buy Now button.', 'totc-demo-bar' ),
 			)
 		);
 
@@ -232,11 +225,11 @@ class totcdbInit {
 
 		$settings = get_option( 'totcdb', false );
 
-		if ( $settings === false || empty( $settings['download_id'] ) ) {
+		if ( $settings === false || empty( $settings['product_url'] ) ) {
 			return;
 		}
 
-		$this->download_id = $settings['download_id'];
+		$this->product_url = $settings['product_url'];
 		$this->campaign_medium = !empty( $settings['campaign_medium'] ) ? $settings['campaign_medium'] : '';
 
 		include_once( self::$plugin_dir . '/templates/demo-bar.php' );

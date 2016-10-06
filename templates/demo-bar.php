@@ -152,10 +152,9 @@
 			// Compile the buy button
 			$url = add_query_arg(
 				array(
-					'edd_action' => 'add_to_cart',
-					'download_id' => absint( $this->download_id )
+					'buy_now' => 1
 				),
-				$this->store_url
+				$this->product_url
 			);
 
 			// Add affiliate referral link
