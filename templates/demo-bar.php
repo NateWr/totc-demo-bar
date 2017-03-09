@@ -118,26 +118,6 @@
 		cursor: progress;
 	}
 </style>
-<script type="text/javascript">
-	jQuery(document).ready(function ($) {
-		var totcdb = $( '#totcdb' );
-		setTimeout( function() {
-			totcdb.removeClass( 'initial' );
-			totcdb.addClass( 'open' );
-		}, 2000 );
-		totcdb.click( function(e) {
-			if ( $( e.target ).hasClass( 'totcdb-button' ) ) {
-				$( e.target ).attr( 'disabled', 'disabled' );
-				return;
-			}
-			if ( $( e.target ).hasClass( 'totcdb-close' ) ) {
-				$(this).removeClass( 'open' );
-			} else if ( $( e.target ).hasClass( 'totcdb-open' ) ) {
-				$(this).addClass( 'open' );
-			}
-		} );
-	} );
-</script>
 <div id="totcdb" class="totc-demo-bar initial">
 	<a class="totcdb-close" href="#">&rarr;</a>
 	<a class="totcdb-open" href="#">&larr;</a>
@@ -177,3 +157,16 @@
 		<a class="totcdb-button" href="<?php echo esc_url( $url ) ?>">Buy Now</a>
 	</div>
 </div>
+<script type="text/javascript">
+	var totcdb = document.getElementById('totcdb');
+	setTimeout( function() {
+		totcdb.className = 'totc-demo-bar open';
+	}, 2000 );
+	totcdb.onclick = function(e) {
+		if ( e.target.className == 'totcdb-close' ) {
+			totcdb.className = 'totc-demo-bar';
+		} else if ( e.target.className = 'totcdb-open' ) {
+			totcdb.className = 'totc-demo-bar open';
+		}
+	};
+</script>
